@@ -43,7 +43,8 @@ int main() {
             cerr << "Error opening sensor (id=" << k << ")." << endl;
             return EXIT_FAILURE;
         }
-        sensors.push_back(new_sensor);
+        TURN_OFF(new_sensor);
+        sensors[k] = new_sensor;
     }
 
     // Perform calibration (x5 1 second blink)
@@ -53,8 +54,10 @@ int main() {
         for (int x = 0; x < 5; ++x) {
             TURN_ON(sensors[k])
             // sleep 1000 ms
+            cout << "Sleeping for 1000 ms" << endl;
             this_thread::sleep_for(chrono::milliseconds(1000));
             TURN_OFF(sensors[k])
+            cout << "Sleeping for 1000 ms" << endl;
             this_thread::sleep_for(chrono::milliseconds(1000));
         }
     }
