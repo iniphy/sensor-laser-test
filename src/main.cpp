@@ -7,12 +7,12 @@
 using namespace std;
 using namespace RecFusion;
 
-#define TURN_ON(sensor) if (!(sensor).setLaserState(true)) { \
+#define TURN_ON(sensor) if (!(sensor)->setLaserState(true)) { \
     cerr << "Failed to turn on the laser" << endl; \
 }
 
 
-#define TURN_OFF(sensor) if (!(sensor).setLaserState(false)) { \
+#define TURN_OFF(sensor) if (!(sensor)->setLaserState(false)) { \
     cerr << "Failed to turn off the laser" << endl; \
 }
 
@@ -32,12 +32,12 @@ int main() {
 
     // Opening all sensors
     cout << "Opening " << numSensors << " sensors..." << endl;
-    vector sensors<Sensor>(numSensors);
+    vector<Sensor*> sensors(numSensors);
 
     for (int k = 0; k < numSensors; k++) {
-        Sensor new_sensor;
-        new_sensor.open(k);
-        if (new_sensor.isOpen()) {
+        auto* new_sensor = new Sensor();
+        new_sensor->open(k);
+        if (new_sensor->isOpen()) {
             cout << "Sensor (id=" << k << ") opened successfully." << endl;
         } else {
             cerr << "Error opening sensor (id=" << k << ")." << endl;
@@ -70,5 +70,10 @@ int main() {
         }
     }
     cout << "Testing sequence completed." << endl;
+    // Delete pointers to sensors
+    for (int k = 0; k < numSensors; ++k) {
+        delete sensors[k];
+    }
+    sensors.clear();
     return EXIT_SUCCESS;
 }
