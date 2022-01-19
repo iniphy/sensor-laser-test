@@ -21,22 +21,23 @@ int main() {
 
     // Check for number of connected sensors
     cout << "Finding out how many sensors are connected..." << endl;
-    Sensor initial_sensor;
-    int numSensors = initial_sensor.deviceCount();
-    if (numSensors == 0) {
+    SensorManager sensor_manager;
+    int num_sensor = sensor_manager.deviceCount();
+    if (num_sensor == 0) {
         cerr << "No sensors are connected. Feed me please." << endl;
         return EXIT_FAILURE;
     } else {
-        cout << "Found " << numSensors << " connected sensors." << endl;
+        cout << "Found " << num_sensor << " connected sensors." << endl;
     }
 
     // Opening all sensors
-    cout << "Opening " << numSensors << " sensors..." << endl;
-    vector<Sensor*> sensors(numSensors);
+    cout << "Opening " << num_sensor << " sensors..." << endl;
+    vector<Sensor*> sensors(num_sensor);
 
-    for (int k = 0; k < numSensors; k++) {
-        auto* new_sensor = new Sensor();
-        new_sensor->open(k);
+    for (int k = 0; k < num_sensor; k++) {
+        auto* new_sensor = sensor_manager.sensor(k);
+        // TODO: setup here the correct format
+        new_sensor->open();
         if (new_sensor->isOpen()) {
             cout << "Sensor (id=" << k << ") opened successfully." << endl;
         } else {
@@ -49,7 +50,7 @@ int main() {
 
     // Perform calibration (x5 1 second blink)
     cout << "Performing calibration (x5 of 1 second blinking) for each sensor." << endl;
-    for (int k = 0; k < numSensors; ++k) {
+    for (int k = 0; k < num_sensor; ++k) {
         cout << "Blinking sensor (id=" << k << ")." << endl;
         for (int x = 0; x < 5; ++x) {
             TURN_ON(sensors[k])
@@ -64,7 +65,7 @@ int main() {
 
     // Performing fast laser on/off
     cout << "Performing fast laser on/off (x5 events each after 5 seconds)." << endl;
-    for (int k = 0; k < numSensors; ++k) {
+    for (int k = 0; k < num_sensor; ++k) {
         cout << "Fast laser on/off for sensor (id=" << k << ")." << endl;
         for (int x = 0; x < 5; ++x) {
             TURN_ON(sensors[k])
@@ -73,10 +74,5 @@ int main() {
         }
     }
     cout << "Testing sequence completed." << endl;
-    // Delete pointers to sensors
-    for (int k = 0; k < numSensors; ++k) {
-        delete sensors[k];
-    }
-    sensors.clear();
     return EXIT_SUCCESS;
 }
