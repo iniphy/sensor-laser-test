@@ -22,6 +22,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 
 add_executable(sensor-laser-test src/main.cpp)
 
-target_link_libraries(sensor-laser-test RecFusion) # cxxopts
+target_link_libraries(sensor-laser-test RecFusionSDK) # cxxopts
 target_include_directories(sensor-laser-test PRIVATE ${RECFUSION_PATH}/include)
 target_link_directories(sensor-laser-test PRIVATE ${RECFUSION_PATH}/lib)
