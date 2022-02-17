@@ -18,13 +18,15 @@ using namespace RecFusion;
 
 int main() {
     cout << "----- Sensor-laser-test. Welcome! -----" << endl;
-
+    RecFusionSDK::init();
     // Check for number of connected sensors
     cout << "Finding out how many sensors are connected..." << endl;
     SensorManager sensor_manager;
     int num_sensor = sensor_manager.deviceCount();
+    cout << "Devices" << num_sensor << endl;
     if (num_sensor == 0) {
         cerr << "No sensors are connected. Feed me please." << endl;
+        RecFusionSDK::deinit();
         return EXIT_FAILURE;
     } else {
         cout << "Found " << num_sensor << " connected sensors." << endl;
@@ -42,6 +44,7 @@ int main() {
             cout << "Sensor (id=" << k << ") opened successfully." << endl;
         } else {
             cerr << "Error opening sensor (id=" << k << ")." << endl;
+            RecFusionSDK::deinit();
             return EXIT_FAILURE;
         }
         TURN_OFF(new_sensor);
@@ -74,5 +77,6 @@ int main() {
         }
     }
     cout << "Testing sequence completed." << endl;
+    RecFusionSDK::deinit();
     return EXIT_SUCCESS;
 }
